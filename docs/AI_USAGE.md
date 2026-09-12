@@ -30,3 +30,13 @@ El método de proyección es una media de producción diaria de tres meses cerra
 ## Límites y honestidad de los datos
 
 Los seeders crean datos sintéticos de demostración. No se presentaron como mediciones oficiales ni se inventó evidencia de prompts externos, tareas individuales o una URL pública. Los pronósticos retrospectivos del seeder se etiquetan como tales; fueron calculados durante la preparación para habilitar una comparación demostrable, no son evidencia de que el equipo los hubiera emitido en una fecha pasada.
+
+## Sesión de rediseño Atlas Solar
+
+Jerelyn solicitó mejorar la originalidad del diseño y realizar commits pequeños después de verificar cada unidad de trabajo. El asistente propuso e implementó el concepto Atlas Solar: sistema visual compartido, dashboard territorial y presentación de horizontes de proyección. El usuario proporcionó explícitamente el nombre y correo para la autoría local de Git; no se alteraron fechas ni commits anteriores.
+
+Se utilizó IA para revisar Blade, CSS, JavaScript y los flujos de presentación; escribir los cambios; identificar una desviación de alerta que consultaba un atributo inexistente; y añadir verificaciones de estados vacíos, filtros y proyecciones. Se usaron herramientas de terminal y edición, pautas de la habilidad Sites y la referencia de descargas oficiales de PHP para preparar el entorno de pruebas. Se preservó Laravel; no se publicó una versión en Sites.
+
+La verificación de esta sesión terminó con 27 pruebas y 249 aserciones, compilación de Vite, compilación de vistas Blade y 11 rutas públicas con HTTP 200 sobre una base SQLite local separada. No se realizó inspección visual automatizada en navegador ni verificación de despliegue público. La revisión visual humana permanece pendiente; no se atribuye al equipo una aprobación que todavía no ha comunicado.
+
+El detalle de decisiones, límites y correspondencia entre requisitos y commits está en [DESIGN.md](DESIGN.md).
