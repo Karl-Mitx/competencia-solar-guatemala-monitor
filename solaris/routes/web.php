@@ -18,6 +18,7 @@ Route::get('/reports/print', [DashboardController::class, 'reportPrint'])->name(
 Route::get('/reports/export', [DashboardController::class, 'export'])->name('reports.export');
 Route::post('/reports/email', ReportEmailController::class)->middleware('throttle:3,10')->name('reports.email');
 Route::get('/alerts', [DashboardController::class, 'alerts'])->name('alerts.index');
+Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->middleware(['auth', 'asset.manager'])->name('audit.index');
 Route::view('/api-docs', 'api-docs')->name('api.docs');
 Route::view('/manual', 'manual')->name('manual');
 Route::post('/solar-help', SolarHelpController::class)->middleware('throttle:10,1')->name('solar-help');
