@@ -11,6 +11,20 @@ $files = [
     'resources/views/layouts/app.blade.php',
     'public/build/manifest.json',
 ];
+if (($argv[1] ?? '') === 'features') {
+    $destination = dirname($root).'/output/deploy/solaris-tema-correo.zip';
+    $files = array_merge($files, [
+        'app/Http/Controllers/DashboardController.php',
+        'app/Http/Controllers/ReportEmailController.php',
+        'app/Http/Requests/EmailReportRequest.php',
+        'app/Services/ReportCsv.php',
+        'app/Mail/DepartmentReport.php',
+        'resources/views/reports.blade.php',
+        'resources/views/emails/department-report.blade.php',
+        'routes/web.php',
+        'config/mail.php',
+    ]);
+}
 $manifest = json_decode(file_get_contents($root.'/public/build/manifest.json'), true, flags: JSON_THROW_ON_ERROR);
 foreach ($manifest as $entry) {
     $files[] = 'public/build/'.$entry['file'];

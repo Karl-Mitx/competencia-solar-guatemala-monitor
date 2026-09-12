@@ -12,6 +12,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/map', [DashboardController::class, 'map'])->name('map');
 Route::get('/reports', [DashboardController::class, 'reports'])->name('reports');
 Route::get('/reports/export', [DashboardController::class, 'export'])->name('reports.export');
+Route::post('/reports/email', \App\Http\Controllers\ReportEmailController::class)->middleware('throttle:3,10')->name('reports.email');
 Route::get('/alerts', [DashboardController::class, 'alerts'])->name('alerts.index');
 Route::view('/api-docs', 'api-docs')->name('api.docs');
 Route::view('/manual', 'manual')->name('manual');

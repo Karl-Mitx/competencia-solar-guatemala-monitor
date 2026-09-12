@@ -49,14 +49,8 @@ class DashboardController extends Controller
     {
         $rows = $this->analytics->dashboard($request->validated())['ranking'];
 
-        return response()->streamDownload(function () use ($rows) {
-            $out = fopen('php://output', 'w');
-            fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, ['Departamento', 'Granjas', 'Paneles', 'Capacidad kW', 'Generación kWh', 'Esperada kWh', 'Familias', 'CO2 kg', 'CO2 toneladas']);
-            foreach ($rows as $row) {
-                fputcsv($out, array_map(fn ($key) => $row[$key], ['name', 'farms', 'panels', 'capacity_kw', 'generation_kwh', 'expected_kwh', 'families', 'co2_kg', 'co2_tonnes']));
-            }
-            fclose($out);
-        }, 'solaris-departamentos-'.now()->format('Ymd').'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        $csv = app(\App\Services\ReportCsv::class);
+
+        return response()->streamDownload(fn () => print($csv->content($rows)), $csv->filename(), ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 }
