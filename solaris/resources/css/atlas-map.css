@@ -29,9 +29,11 @@ body .territory-legend>span{display:inline-flex;align-items:center;gap:6px}
 body .territory-legend i{display:inline-block;width:10px;height:10px;border:1px solid #183c3430;border-radius:2px}
 body .territory-legend .territory-scale i{width:65px;background:linear-gradient(90deg,#d5dfaf,#9aba86,#5e966d,#306b50,#183c34)}
 body .territory-scale-note{padding:0 22px 15px;margin:0;font-size:.64rem;color:#657468}
-body .territory-sun{color:#b45d28;font-size:1.1rem}
+body .territory-sun{display:grid;place-items:center;color:#183c34;background:#eac177;border-radius:50%;width:22px;height:22px}
+body .territory-sun svg{width:16px;height:16px}
 body .solar-farm-icon{background:none;border:0;display:grid;place-items:center}
-body .solar-farm-icon span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;color:#fff5d9;background:#b8582b;border:2px solid #fff5d9;box-shadow:0 2px 8px #183c3455;font-size:20px;line-height:1}
+body .solar-farm-icon span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;color:#183c34;background:#eac177;border:1px solid #183c34;box-shadow:0 0 0 3px #eac17735,0 2px 8px #183c3455}
+body .solar-farm-icon svg{width:72%;height:72%}
 body .territory-tooltip{background:#183c34;color:#fff5db;border:0;font-family:inherit;border-radius:4px}
 body .territory-layout .map-error{z-index:800;font-size:.8rem;background:#fff5db;color:#183c34;padding:12px}
 @media(max-width:1200px){body .atlas-territory .territory-layout{grid-template-columns:1fr}body .atlas-territory .territory-reading{display:grid;grid-template-columns:1fr 1fr;column-gap:22px}body .atlas-territory .territory-reading h3,body .atlas-territory .territory-kicker,body .atlas-territory .territory-scope{grid-column:1/-1}body .atlas-territory .territory-scope{margin-bottom:10px}}
