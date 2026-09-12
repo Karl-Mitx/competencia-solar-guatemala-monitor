@@ -30,6 +30,7 @@
         <a class="nav-link {{ request()->routeIs('api.docs') ? 'active' : '' }}" href="{{ route('api.docs') }}"><x-icon name="code"/> API & datos</a>
         <a class="nav-link {{ request()->routeIs('manual') ? 'active' : '' }}" href="{{ route('manual') }}"><x-icon name="book"/> Guía de uso</a>
         @auth<a class="nav-link {{ request()->routeIs('audit.index') ? 'active' : '' }}" href="{{ route('audit.index') }}"><x-icon name="history"/> Auditoría</a>@endauth
+        @auth @if(auth()->user()->isAdmin())<a class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}" href="{{ route('admin.users') }}"><x-icon name="users"/> Usuarios</a>@endif @endauth
         <div class="impact-note"><span class="impact-icon"><x-icon name="leaf"/></span><strong>Territorio. Energía. Impacto.</strong><p>22 departamentos en un mismo atlas.</p></div>
         <div class="sidebar-user"><span class="avatar">{{ auth()->check() ? mb_substr(auth()->user()->name,0,1) : 'GT' }}</span><div><strong>{{ auth()->user()->name ?? 'Explorador de energía' }}</strong><small>{{ auth()->check() ? 'Administración' : 'Acceso público' }}</small></div>@auth<form method="POST" action="{{ route('logout') }}">@csrf<button class="icon-button" aria-label="Cerrar sesión"><x-icon name="logout"/></button></form>@else<a class="icon-button" href="{{ route('login') }}" aria-label="Ingresar"><x-icon name="arrow"/></a>@endauth</div>
     </div>
