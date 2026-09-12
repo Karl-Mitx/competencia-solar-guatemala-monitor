@@ -14,5 +14,13 @@
 /solaris/.phpunit.result.cache
 /tmp/
 /.local/
+/.codex-presentation-build/
+/.codex-finalizer/
+/.chart-data-*/
+/output/presentation/Solaris-Guatemala.pptx
+/output/presentation/Solaris-Guatemala-v2.pptx
+/.env
+/.env.*
+!/.env.deploy.example
 /docs/sources/rendered/
 *.log

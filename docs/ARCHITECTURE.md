@@ -1,6 +1,6 @@
 # Arquitectura de Solaris Guatemala
 
-Este documento describe el diseño previsto para la aplicación ubicada en `solaris/`. Es una guía de implementación y defensa técnica; el estado real de cada componente debe verificarse contra el código y las pruebas antes de la entrega.
+Este documento describe la aplicación ubicada en `solaris/` y sirve como guía de defensa técnica. El estado indicado al final fue verificado contra el código y las pruebas locales.
 
 ## Decisión de plataforma
 
@@ -104,7 +104,11 @@ La entrega requiere servidor Laravel, MySQL, recursos compilados, configuración
 
 El GitHub y el dominio deben ser los enlaces reales del proyecto. La documentación de IA debe registrar prompts y herramientas usados, revisión del código y límites observados, sin inventar evidencia ni participación humana.
 
-## Inspección local de MySQL
+## Estado verificado antes de la entrega
+
+El 11 de septiembre de 2026 se comprobó la aplicación con MySQL 8.2 local en `127.0.0.1:3308`: 22 departamentos, 32 granjas, 384 registros de generación, 189 proyecciones y 46 alertas. `php artisan test` terminó con 23 pruebas y 231 aserciones; `npm run build` generó los recursos de Vite y las rutas públicas respondieron con HTTP 200. La publicación en la nube y el dominio todavía requieren que el equipo elija proveedor y configure sus credenciales.
+
+## Inspección inicial de MySQL existente
 
 Inspección de solo lectura realizada durante esta sesión:
 
@@ -114,4 +118,25 @@ Inspección de solo lectura realizada durante esta sesión:
 - Una prueba TCP local de lectura con usuario `root`, sin contraseña y sin archivos de configuración, fue rechazada por autenticación. No se pudo verificar la versión del servidor mediante SQL.
 - No se consultaron secretos, no se modificaron bases y no se arrancaron ni configuraron servicios.
 
-Conclusión: hay un motor MySQL local disponible, pero el acceso autenticado de la aplicación debe resolverse con credenciales autorizadas para una base dedicada, o con una instancia aislada del proyecto. La existencia del servicio no confirma que el proyecto ya esté conectado a MySQL.
+La inspección confirmó un motor existente con acceso autenticado no resuelto. Ese servicio no se reutilizó ni modificó.
+
+## Instancia MySQL aislada del proyecto
+
+Después de la inspección se preparó una instancia independiente con datos exclusivamente en `C:\Competencia de Progra 2\.local\mysql-data`. Se verificó que el puerto 3308 estuviera libre antes de iniciarla. Se ejecuta como proceso oculto y no como servicio de Windows; la instancia `MySQL80` del puerto 3306 y los servicios WAMP conservaron su estado.
+
+| Parámetro | Valor verificado |
+|---|---|
+| Motor | MySQL 8.2.0 |
+| Interfaz | 127.0.0.1, accesible solamente desde el equipo local |
+| Puerto | 3308 |
+| Base dedicada | `solaris` |
+| Usuario de aplicación | `solaris_app`, permisos sobre `solaris.*` |
+| Juego de caracteres | `utf8mb4` |
+| Colación | `utf8mb4_unicode_ci` |
+| Credenciales locales | `.local/mysql-connection.env`, excluido de Git |
+| Inicio local | `.local/start-mysql.ps1` |
+| Apagado controlado | `.local/stop-mysql.ps1` |
+
+Las contraseñas de aplicación y administración se generaron con aleatoriedad criptográfica y no se incluyeron en documentación, comandos impresos ni código versionado. Las configuraciones auxiliares con secretos permanecen dentro de `.local`; el SQL temporal de inicialización fue eliminado después de aplicarlo.
+
+Se verificó conexión autenticada, versión, base, puerto, dirección de escucha y juego de caracteres, y se realizó un apagado e inicio limpio. Al terminar la preparación la base estaba vacía y lista para las migraciones de Laravel. Esta preparación no implica publicación en la nube ni certifica por sí misma que todas las pruebas de la aplicación hayan pasado en MySQL.

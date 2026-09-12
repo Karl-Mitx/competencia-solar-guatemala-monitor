@@ -16,9 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(DepartmentSeeder::class);
-        if (config('solaris.demo_data')) $this->call(DemoSeeder::class);
+        if (config('solaris.demo_data')) {
+            $this->call(DemoSeeder::class);
+        }
         if (config('solaris.admin_email') && config('solaris.admin_password')) {
-            User::firstOrCreate(['email'=>config('solaris.admin_email')],['name'=>'Administrador Solaris','password'=>config('solaris.admin_password')]);
+            User::firstOrCreate(['email' => config('solaris.admin_email')], ['name' => 'Administrador Solaris', 'password' => config('solaris.admin_password')]);
         }
     }
 }
