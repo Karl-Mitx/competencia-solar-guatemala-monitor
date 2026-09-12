@@ -1,0 +1,38 @@
+body .territory-toolbar{display:flex;align-items:center;gap:12px;padding:0 22px 18px;flex-wrap:wrap}
+body .territory-toolbar label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#52665c}
+body .territory-toolbar select{width:auto;flex:1;min-width:180px;background:#faf7ee;border:1px solid #cbd2bf;border-radius:7px;padding:10px;color:#183c34}
+body .territory-reset{border:0;background:none;color:#28664d;font-size:.78rem;padding:9px 0}
+body .territory-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;min-width:0}
+body .territory-layout .map-wrap,body .atlas-territory .territory-layout .map-wrap{height:410px;min-height:410px;flex:initial;border-radius:0}
+body .map-expanded .territory-layout .map-wrap{height:580px;min-height:580px}
+body .territory-layout .solar-map{background:#e4eadc;height:100%;min-height:0}
+body .territory-reading{background:#183c34;color:#f9f2dd;padding:25px 21px;min-width:0;position:relative;overflow:hidden}
+body .territory-reading:before{content:'';position:absolute;width:180px;height:180px;border:1px solid #ffffff12;border-radius:50%;right:-85px;top:-85px;box-shadow:0 0 0 22px #ffffff04,0 0 0 44px #ffffff04;pointer-events:none}
+body .territory-kicker{color:#e7cf86;font-size:.63rem;letter-spacing:.16em}
+body .territory-reading h3{font-size:1.6rem;line-height:1.13;margin:12px 0;color:#fff5db;overflow-wrap:anywhere}
+body .territory-scope{font-size:.68rem;color:#bed1c7;margin-bottom:25px}
+body .territory-energy strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.65rem;letter-spacing:-.04em;overflow-wrap:anywhere}
+body .territory-energy>span{font-size:.7rem;color:#c5d7ca}
+body .territory-note{font-size:.69rem;color:#c5d7ca;margin:8px 0 18px}
+body .territory-stats{margin:0}
+body .territory-stats>div{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #ffffff20;padding:10px 0;align-items:baseline}
+body .territory-stats dt{font-size:.68rem;color:#c5d7ca}
+body .territory-stats dd{margin:0;font-size:1rem;text-align:right}
+body .territory-stats small{font-size:.62rem;color:#c5d7ca}
+body .territory-share{margin-top:20px;font-size:.65rem;color:#c5d7ca}
+body .territory-share-track{background:#ffffff18;height:5px;margin:9px 0;border-radius:3px;overflow:hidden}
+body .territory-share-track span{display:block;height:100%;background:#e7cf86}
+body .territory-share strong{font-size:.72rem;color:#e7cf86}
+body .territory-footnote{display:block;color:#b4c9bd;font-size:.6rem;margin-top:22px}
+body .territory-legend{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:16px 22px 7px;font-size:.67rem;color:#53675c}
+body .territory-legend>span{display:inline-flex;align-items:center;gap:6px}
+body .territory-legend i{display:inline-block;width:10px;height:10px;border:1px solid #183c3430;border-radius:2px}
+body .territory-legend .territory-scale i{width:65px;background:linear-gradient(90deg,#d5dfaf,#9aba86,#5e966d,#306b50,#183c34)}
+body .territory-scale-note{padding:0 22px 15px;margin:0;font-size:.64rem;color:#657468}
+body .territory-sun{color:#b45d28;font-size:1.1rem}
+body .solar-farm-icon{background:none;border:0;display:grid;place-items:center}
+body .solar-farm-icon span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;color:#fff5d9;background:#b8582b;border:2px solid #fff5d9;box-shadow:0 2px 8px #183c3455;font-size:20px;line-height:1}
+body .territory-tooltip{background:#183c34;color:#fff5db;border:0;font-family:inherit;border-radius:4px}
+body .territory-layout .map-error{z-index:800;font-size:.8rem;background:#fff5db;color:#183c34;padding:12px}
+@media(max-width:1200px){body .atlas-territory .territory-layout{grid-template-columns:1fr}body .atlas-territory .territory-reading{display:grid;grid-template-columns:1fr 1fr;column-gap:22px}body .atlas-territory .territory-reading h3,body .atlas-territory .territory-kicker,body .atlas-territory .territory-scope{grid-column:1/-1}body .atlas-territory .territory-scope{margin-bottom:10px}}
+@media(max-width:650px){body .territory-layout{grid-template-columns:1fr}body .territory-layout .map-wrap,body .atlas-territory .territory-layout .map-wrap,body .map-expanded .territory-layout .map-wrap{height:370px;min-height:370px}body .territory-reading,body .atlas-territory .territory-reading{display:block;padding:22px}body .territory-toolbar{padding:0 16px 15px}body .territory-toolbar label{width:100%}body .territory-reading h3{font-size:1.8rem}}

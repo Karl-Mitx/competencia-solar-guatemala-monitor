@@ -1,4 +1,6 @@
 import './bootstrap';
+import { createTerritoryExplorer } from './territory-map';
+import boundaryUrl from '../data/guatemala-departments.json?url';
 
 const loadScript = (src) => new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
@@ -19,16 +21,23 @@ function initMenu() {
 
 async function initMap() {
     const mapElement = document.getElementById('solar-map'); const farms = readJson('map-data'); if (!mapElement || !farms) return;
+    const territoryData = readJson('territory-data');
+    const attachTerritories = territoryData ? createTerritoryExplorer(territoryData, boundaryUrl) : null;
     try {
         await loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'); if (!window.L) throw new Error('Leaflet no disponible');
         const map = L.map(mapElement, { scrollWheelZoom:false, minZoom:6, maxZoom:16 }).setView([15.1,-90.25],7);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap contributors', maxZoom:19 }).addTo(map);
+        if (attachTerritories) {
+            try { await attachTerritories(map); } catch { document.querySelector('.map-error')?.removeAttribute('hidden'); }
+        }
         const points=[];
         farms.forEach((farm) => {
             if (!Number.isFinite(Number(farm.latitude)) || !Number.isFinite(Number(farm.longitude))) return;
-            L.circleMarker([farm.latitude,farm.longitude], { radius:8, color:'#fff', weight:2, fillColor:farm.color||'#267456', fillOpacity:.95 }).bindPopup(`<div class="popup-title">${escapeHtml(farm.name)}</div><div class="popup-meta">${escapeHtml(farm.department)}<br>${Number(farm.capacity_kw).toFixed(1)} kW · ${Number(farm.panels).toLocaleString('es-GT')} paneles<br>${Number(farm.generation_kwh).toLocaleString('es-GT')} kWh registrados</div><a class="popup-link" href="${farm.url}">Ver ficha de granja →</a>`).addTo(map); points.push([farm.latitude,farm.longitude]);
+            const size = Math.min(34, 20 + Math.sqrt(Math.max(0, Number(farm.capacity_kw))) / 2);
+            L.marker([farm.latitude,farm.longitude], { title:farm.name, icon:L.divIcon({ className:'solar-farm-icon', html:'<span aria-hidden="true">✳</span>', iconSize:[size,size], iconAnchor:[size/2,size/2] }) }).bindPopup(`<div class="popup-title">${escapeHtml(farm.name)}</div><div class="popup-meta">${escapeHtml(farm.department)}<br>${Number(farm.capacity_kw).toFixed(1)} kW · ${Number(farm.panels).toLocaleString('es-GT')} paneles<br>${Number(farm.generation_kwh).toLocaleString('es-GT')} kWh registrados</div><a class="popup-link" href="${escapeHtml(farm.url)}">Ver ficha de granja →</a>`).addTo(map); points.push([farm.latitude,farm.longitude]);
         });
-        if (points.length>1) map.fitBounds(points,{padding:[25,25]}); else if (points.length===1) map.setView(points[0],10); setTimeout(()=>map.invalidateSize(),250);
+        if (!attachTerritories && points.length>1) map.fitBounds(points,{padding:[25,25]}); else if (!attachTerritories && points.length===1) map.setView(points[0],10); setTimeout(()=>map.invalidateSize(),250);
+        if (window.ResizeObserver) new ResizeObserver(() => map.invalidateSize()).observe(mapElement);
     } catch { document.querySelector('.map-error')?.removeAttribute('hidden'); }
 }
 

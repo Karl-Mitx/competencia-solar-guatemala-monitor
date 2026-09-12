@@ -26,7 +26,7 @@
         <div class="reading-baseline"><span>Generación esperada</span><strong>{{ $nf($t['expected_kwh']) }} <small>kWh</small></strong></div>
         <a class="reading-link" href="{{ route('reports', request()->query()) }}">Explorar el balance <x-icon name="arrow"/></a>
     </section>
-    <div class="atlas-territory">@include('partials.map', ['expanded' => true])</div>
+    <div class="atlas-territory">@include('partials.territory-map', ['expanded' => true])</div>
 </div>
 <section class="atlas-inventory" aria-label="Infraestructura e impacto">
     <article><span class="inventory-number">02</span><x-icon name="farm"/><div><span>Granjas registradas</span><strong>{{ $nf($t['farms']) }}</strong><small>{{ $nf($t['active_farms']) }} en operación</small></div></article>

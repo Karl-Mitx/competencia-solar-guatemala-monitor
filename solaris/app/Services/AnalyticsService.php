@@ -44,7 +44,7 @@ class AnalyticsService
             'generations' => fn ($q) => $this->filterPeriods($q, $filters)->orderBy('period')])->get();
         $departments = Department::orderBy('name')
             ->when($filters['department_id'] ?? null, fn ($q, $id) => $q->whereKey($id))->get();
-        $empty = ['farms' => 0, 'active_farms' => 0, 'panels' => 0, 'capacity_kw' => 0, 'generation_kwh' => 0, 'expected_kwh' => 0, 'families' => 0];
+        $empty = ['farms' => 0, 'active_farms' => 0, 'panels' => 0, 'capacity_kw' => 0, 'generation_kwh' => 0, 'expected_kwh' => 0, 'families' => 0, 'generation_records' => 0];
         $totals = $empty;
         $ranking = $departments->mapWithKeys(fn ($d) => [$d->id => array_merge($empty, ['id' => $d->id, 'name' => $d->name, 'color' => $d->color])])->all();
         $trend = [];
@@ -55,7 +55,7 @@ class AnalyticsService
             $real = (float) $farm->generations->sum('real_kwh');
             $expected = (float) $farm->generations->sum('expected_kwh');
             $values = ['farms' => 1, 'active_farms' => $farm->is_active ? 1 : 0, 'panels' => $panels, 'capacity_kw' => $capacity,
-                'generation_kwh' => $real, 'expected_kwh' => $expected, 'families' => $farm->families_count];
+                'generation_kwh' => $real, 'expected_kwh' => $expected, 'families' => $farm->families_count, 'generation_records' => $farm->generations->count()];
             foreach ($values as $key => $value) {
                 $totals[$key] += $value;
                 $ranking[$farm->department_id][$key] += $value;
@@ -88,6 +88,6 @@ class AnalyticsService
 
         return ['totals' => $totals, 'trend' => array_values($trend),
             'ranking' => collect($ranking)->map($enrich)->sortByDesc('generation_kwh')->values()->all(),
-            'map' => $map, 'alerts' => $this->alerts(array_diff_key($filters,['status' => true]))->limit(6)->get()];
+            'map' => $map, 'alerts' => $this->alerts(array_diff_key($filters, ['status' => true]))->limit(6)->get()];
     }
 }

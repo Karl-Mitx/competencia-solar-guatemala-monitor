@@ -2,6 +2,7 @@
 @import './atlas.css';
 @import './atlas-dashboard.css';
 @import './atlas-projections.css';
+@import './atlas-map.css';
 :root { --ink:#10202c; --navy:#111e29; --navy-2:#1c303d; --paper:#f5f6f2; --white:#fff; --muted:#6f7c80; --line:#dfe5e3; --green:#238b68; --green-dark:#17624e; --amber:#efad35; --amber-soft:#fff0c9; --blue:#4c87ba; --danger:#bb5e4e; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
