@@ -10,8 +10,11 @@ const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => 
 
 function initMenu() {
     const sidebar = document.getElementById('sidebar'); const scrim = document.querySelector('.sidebar-scrim');
-    document.querySelector('[data-menu-toggle]')?.addEventListener('click', (event) => { const open = sidebar?.classList.toggle('open'); scrim?.classList.toggle('open', open); event.currentTarget.setAttribute('aria-expanded', String(open)); });
-    document.querySelector('[data-menu-close]')?.addEventListener('click', () => { sidebar?.classList.remove('open'); scrim?.classList.remove('open'); });
+    const toggle = document.querySelector('[data-menu-toggle]');
+    const setOpen = (open) => { sidebar?.classList.toggle('open', open); scrim?.classList.toggle('open', open); toggle?.setAttribute('aria-expanded', String(open)); };
+    toggle?.addEventListener('click', () => setOpen(!sidebar?.classList.contains('open')));
+    document.querySelector('[data-menu-close]')?.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && sidebar?.classList.contains('open')) { setOpen(false); toggle?.focus(); } });
 }
 
 async function initMap() {
