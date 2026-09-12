@@ -9,6 +9,7 @@ $files = [
     'resources/views/map.blade.php',
     'resources/views/partials/territory-map.blade.php',
     'resources/views/layouts/app.blade.php',
+    'resources/views/partials/solar-help.blade.php',
     'public/build/manifest.json',
 ];
 if (($argv[1] ?? '') === 'features') {

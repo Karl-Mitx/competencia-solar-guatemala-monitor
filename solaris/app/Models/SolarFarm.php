@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\SolarFarmFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SolarFarm extends Model
 {
+    /** @use HasFactory<SolarFarmFactory> */
+    use HasFactory;
     protected $fillable = [
         'department_id', 'name', 'location_name', 'latitude', 'longitude',
         'families_count', 'is_active', 'commissioned_at', 'notes', 'photo_path',

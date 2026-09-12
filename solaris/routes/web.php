@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlertController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FarmController;
@@ -27,11 +28,16 @@ Route::post('/solar-help', SolarHelpController::class)->middleware('throttle:10,
 Route::get('/login', [AuthController::class, 'create'])->middleware('guest')->name('login');
 Route::post('/login', [AuthController::class, 'store'])->middleware('guest')->name('login.store');
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth')->name('logout');
+Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'updatePassword'])->middleware('guest')->name('password.update');
 Route::middleware(['auth', 'asset.manager'])->group(function () {
     Route::resource('farms', FarmController::class)->except(['index', 'show']);
     Route::resource('panels', PanelController::class)->except(['index', 'show', 'destroy']);
     Route::resource('generations', GenerationController::class)->except(['index', 'show', 'destroy']);
     Route::post('/projections', [ProjectionController::class, 'store'])->name('projections.store');
+    Route::patch('/alerts/{alert}/resolve', [AlertController::class, 'resolve'])->name('alerts.resolve');
 });
 Route::get('/farms/compare', [FarmController::class, 'compare'])->name('farms.compare');
 Route::resource('farms', FarmController::class)->only(['index', 'show']);
