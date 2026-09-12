@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             $this->call(DemoSeeder::class);
         }
         if (config('solaris.admin_email') && config('solaris.admin_password')) {
-            User::firstOrCreate(['email' => config('solaris.admin_email')], ['name' => 'Administrador Solaris', 'password' => config('solaris.admin_password')]);
+            User::updateOrCreate(['email' => config('solaris.admin_email')], ['name' => 'Administrador Solaris', 'password' => config('solaris.admin_password'), 'role' => 'admin']);
         }
     }
 }

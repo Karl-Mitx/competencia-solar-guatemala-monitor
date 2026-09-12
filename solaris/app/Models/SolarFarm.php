@@ -11,7 +11,7 @@ class SolarFarm extends Model
 {
     protected $fillable = [
         'department_id', 'name', 'location_name', 'latitude', 'longitude',
-        'families_count', 'is_active', 'commissioned_at', 'notes',
+        'families_count', 'is_active', 'commissioned_at', 'notes', 'photo_path',
     ];
 
     protected function casts(): array

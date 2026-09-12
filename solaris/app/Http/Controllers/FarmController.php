@@ -8,10 +8,30 @@ use App\Models\Department;
 use App\Models\SolarFarm;
 use App\Models\SolarPanel;
 use App\Services\AnalyticsService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class FarmController extends Controller
 {
+    public function compare(Request $request)
+    {
+        $data = $request->validate([
+            'farm_ids' => ['sometimes', 'array', 'min:2', 'max:4'],
+            'farm_ids.*' => ['required', 'integer', 'distinct', 'exists:solar_farms,id'],
+            'from' => ['nullable', 'date_format:Y-m'],
+            'to' => ['nullable', 'date_format:Y-m', ...($request->filled('from') ? ['after_or_equal:from'] : [])],
+        ]);
+        $ids = collect($data['farm_ids'] ?? [])->map(fn ($id) => (int) $id);
+        $farms = SolarFarm::with(['department', 'panels', 'generations' => fn ($query) => $query
+            ->when($data['from'] ?? null, fn ($q, $month) => $q->where('period', '>=', $month.'-01'))
+            ->when($data['to'] ?? null, fn ($q, $month) => $q->where('period', '<=', $month.'-01'))
+            ->orderBy('period')])->whereIn('id', $ids)->get()->sortBy(fn ($farm) => $ids->search($farm->id))->values();
+        $allFarms = SolarFarm::with('department')->orderBy('name')->get();
+
+        return view('farms.compare', compact('farms', 'allFarms', 'ids'));
+    }
+
     public function index(FilterRequest $request, AnalyticsService $analytics)
     {
         $filters = array_filter($request->validated());
@@ -53,6 +73,11 @@ class FarmController extends Controller
     {
         return DB::transaction(function () use ($request, $farm) {
             $data = $request->validated();
+            if ($request->hasFile('photo')) {
+                if ($farm->photo_path) Storage::disk('public')->delete($farm->photo_path);
+                $data['photo_path'] = $request->file('photo')->store('farms', 'public');
+            }
+            unset($data['photo']);
             $rows = $data['panels'] ?? [];
             unset($data['panels']);
             $farm->fill($data)->save();
@@ -76,6 +101,6 @@ class FarmController extends Controller
     {
         $farm->update(['is_active' => false]);
 
-        return redirect()->route('farms.show',$farm)->with('success','Granja desactivada. Su historial permanece disponible.');
+        return redirect()->route('farms.show', $farm)->with('success', 'Granja desactivada. Su historial permanece disponible.');
     }
 }

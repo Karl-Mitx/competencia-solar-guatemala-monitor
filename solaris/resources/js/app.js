@@ -1,4 +1,9 @@
 import './bootstrap';
+import '../css/chart-appearance.css';
+import '../css/farm-photo.css';
+import { applyChartAppearance } from './chart-appearance';
+import { initSolarHelp } from './solar-help';
+document.addEventListener('DOMContentLoaded', initSolarHelp);
 import { createTerritoryExplorer } from './territory-map';
 import boundaryUrl from '../data/guatemala-departments.json?url';
 
@@ -20,8 +25,7 @@ function initMenu() {
     };
     themeButton?.addEventListener('click', () => {
         const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = theme;
-        try { localStorage.setItem('solaris-theme', theme); } catch { /* Private browsing can disable storage. */ }
+        window.solarisTheme.set(theme);
         updateTheme();
     });
     updateTheme();
@@ -44,11 +48,19 @@ async function initMap() {
         if (attachTerritories) {
             try { await attachTerritories(map); } catch { document.querySelector('.map-error')?.removeAttribute('hidden'); }
         }
-        const points=[];
+        const points=[]; const markerEntries=[];
         farms.forEach((farm) => {
             if (!Number.isFinite(Number(farm.latitude)) || !Number.isFinite(Number(farm.longitude))) return;
             const size = Math.min(34, 20 + Math.sqrt(Math.max(0, Number(farm.capacity_kw))) / 2);
-            L.marker([farm.latitude,farm.longitude], { title:farm.name, icon:L.divIcon({ className:'solar-farm-icon', html:document.getElementById('farm-marker-template').innerHTML, iconSize:[size,size], iconAnchor:[size/2,size/2] }) }).bindPopup(`<div class="popup-title">${escapeHtml(farm.name)}</div><div class="popup-meta">${escapeHtml(farm.department)}<br>${Number(farm.capacity_kw).toFixed(1)} kW · ${Number(farm.panels).toLocaleString('es-GT')} paneles<br>${Number(farm.generation_kwh).toLocaleString('es-GT')} kWh registrados</div><a class="popup-link" href="${escapeHtml(farm.url)}">Ver ficha de granja →</a>`).addTo(map); points.push([farm.latitude,farm.longitude]);
+            const marker = L.marker([farm.latitude,farm.longitude], { title:farm.name, icon:L.divIcon({ className:'solar-farm-icon', html:document.getElementById('farm-marker-template').innerHTML, iconSize:[size,size], iconAnchor:[size/2,size/2] }) }).bindPopup(`<div class="popup-title">${escapeHtml(farm.name)}</div><div class="popup-meta">${escapeHtml(farm.department)}<br>${Number(farm.capacity_kw).toFixed(1)} kW · ${Number(farm.panels).toLocaleString('es-GT')} paneles<br>${Number(farm.generation_kwh).toLocaleString('es-GT')} kWh registrados</div><a class="popup-link" href="${escapeHtml(farm.url)}">Ver ficha de granja →</a>`).addTo(map); points.push([farm.latitude,farm.longitude]); markerEntries.push({marker,farm});
+        });
+        document.getElementById('map-health-filter')?.addEventListener('change', (event) => {
+            const filter = event.target.value;
+            markerEntries.forEach(({ marker, farm }) => {
+                const performance = Number(farm.performance);
+                const visible = filter === 'all' || farm.status === filter || (filter === 'attention' && Number.isFinite(performance) && performance <= 80) || (filter === 'healthy' && Number.isFinite(performance) && performance > 80);
+                if (visible) marker.addTo(map); else map.removeLayer(marker);
+            });
         });
         if (!attachTerritories && points.length>1) map.fitBounds(points,{padding:[25,25]}); else if (!attachTerritories && points.length===1) map.setView(points[0],10); setTimeout(()=>map.invalidateSize(),250);
         if (window.ResizeObserver) new ResizeObserver(() => map.invalidateSize()).observe(mapElement);
@@ -63,7 +75,16 @@ async function initCharts() {
             const source=readJson(canvas.dataset.source); if (!source) return; const isProjection=canvas.dataset.chart==='projection'; let labels=[]; let datasets=[];
             if (isProjection) { const history=source.history||[], forecast=source.forecast||[]; labels=[...new Set([...history.map(x=>x.period),...forecast.map(x=>x.period)])].sort(); datasets=[{label:'Generación real',data:labels.map(l=>history.find(x=>x.period===l)?.real_kwh??null),borderColor:'#267456',backgroundColor:'rgba(105,129,82,.12)',fill:true,tension:.35,pointRadius:3},{label:'Proyección',data:labels.map(l=>forecast.find(x=>x.period===l)?.projected_kwh??null),borderColor:'#c45a32',backgroundColor:'transparent',borderDash:[6,4],fill:false,tension:.35,pointRadius:3,spanGaps:true}]; }
             else { labels=source.map(x=>x.label||x.period); datasets=[{label:'Generación real',data:source.map(x=>x.real_kwh),borderColor:'#267456',backgroundColor:'rgba(105,129,82,.14)',fill:true,tension:.35,pointRadius:2},{label:'Generación esperada',data:source.map(x=>x.expected_kwh),borderColor:'#998566',backgroundColor:'transparent',borderDash:[5,4],fill:false,tension:.35,pointRadius:0}]; }
-            new Chart(canvas,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.dataset.label}: ${Number(ctx.parsed.y??0).toLocaleString('es-GT')} kWh`}}},scales:{x:{grid:{display:false},ticks:{color:'#788986',font:{size:10},maxRotation:0}},y:{beginAtZero:true,grid:{color:'#edf1ef'},ticks:{color:'#788986',font:{size:10},callback:(value)=>Number(value).toLocaleString('es-GT')}}}}});
+            const motion = matchMedia('(prefers-reduced-motion: reduce)');
+            const configuration = {type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.dataset.label}: ${Number(ctx.parsed.y??0).toLocaleString('es-GT')} kWh`}}},scales:{x:{grid:{display:false},ticks:{font:{size:11},maxRotation:0}},y:{beginAtZero:true,grid:{},ticks:{font:{size:11},callback:(value)=>Number(value).toLocaleString('es-GT')}}}}};
+            applyChartAppearance(configuration, document.documentElement.dataset.theme, motion.matches);
+            const chart = new Chart(canvas, configuration);
+            const updateAppearance = () => {
+                applyChartAppearance(chart, document.documentElement.dataset.theme, motion.matches);
+                chart.update('none');
+            };
+            new MutationObserver(updateAppearance).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            motion.addEventListener('change', updateAppearance);
         });
     } catch { canvases.forEach((canvas)=>{if(canvas.parentElement) canvas.parentElement.innerHTML='<p class="empty-inline">La gráfica no está disponible sin conexión. Consulta los valores en la tabla.</p>';}); }
 }

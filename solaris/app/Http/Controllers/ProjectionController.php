@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SolarFarm;
 use App\Services\ProjectionService;
+use App\Services\ForecastSummary;
 use Illuminate\Http\Request;
 
 class ProjectionController extends Controller
@@ -14,9 +15,12 @@ class ProjectionController extends Controller
         $farms = SolarFarm::with('department')->orderBy('name')->get();
         $selectedFarm = isset($data['solar_farm_id']) ? $farms->firstWhere('id', (int) $data['solar_farm_id']) : $farms->first();
 
+        $projections = $selectedFarm ? $selectedFarm->projections()->with('solarFarm')->orderByDesc('period')->get() : collect();
+        $history = $selectedFarm ? $selectedFarm->generations()->orderBy('period')->get() : collect();
+
         return view('projections.index', compact('farms', 'selectedFarm') + [
-            'projections' => $selectedFarm ? $selectedFarm->projections()->with('solarFarm')->orderByDesc('period')->get() : collect(),
-            'history' => $selectedFarm ? $selectedFarm->generations()->orderBy('period')->get() : collect()]);
+            'projections' => $projections, 'history' => $history,
+            'forecastSummary' => app(ForecastSummary::class)->summarize($projections, $history)]);
     }
 
     public function store(Request $request, ProjectionService $service)

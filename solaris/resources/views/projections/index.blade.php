@@ -24,6 +24,10 @@
             <article><span class="eyebrow">{{ $loop->first ? 'PRÓXIMO PERÍODO GUARDADO' : 'PROYECCIÓN GUARDADA' }}</span><h2>{{ $projection->period->translatedFormat('F Y') }}</h2><strong>{{ number_format($projection->projected_kwh, 0) }} <small>kWh</small></strong><span class="forecast-baseline">Base hasta {{ $projection->training_through->format('m/Y') }}</span></article>
         @endforeach
         </section>
+        <section class="card forecast-summary" aria-label="Resumen del horizonte">
+            <div><span class="eyebrow">HORIZONTE GUARDADO</span><strong>{{ number_format($forecastSummary['total_kwh'], 0) }} <small>kWh proyectados</small></strong><p>{{ $forecastSummary['months'] }} meses disponibles para esta granja.</p></div>
+            <div><span class="eyebrow">VARIABILIDAD HISTÓRICA</span><strong>{{ $forecastSummary['volatility'] === null ? '—' : number_format($forecastSummary['volatility'], 1).'%' }}</strong><p>{{ $forecastSummary['confidence'] }} · no es un intervalo de garantía.</p></div>
+        </section>
         @endif
         <section class="card chart-card forecast-chart-card">
             <div class="card-heading"><div><span class="eyebrow">TRAYECTORIA ENERGÉTICA</span><h2>{{ $selectedFarm->name }}</h2><p>{{ $selectedFarm->department->name }} / Energía mensual en kWh</p></div><span class="pill {{ $selectedFarm->is_active ? 'positive' : 'neutral' }}">{{ $selectedFarm->is_active ? 'Granja activa' : 'Granja inactiva' }}</span></div>

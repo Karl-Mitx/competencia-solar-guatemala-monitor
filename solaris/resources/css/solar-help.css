@@ -1,0 +1,20 @@
+body .solar-help-toggle{position:fixed;right:24px;bottom:22px;z-index:950;display:flex;align-items:center;gap:9px;border:1px solid #eac177;border-radius:30px;background:#183c34;color:#f8e2aa;padding:13px 18px;box-shadow:0 4px 20px #0003;font-size:.8rem}
+body .solar-help-toggle[hidden],body .solar-help[hidden]{display:none}
+body .solar-help{position:fixed;right:24px;bottom:86px;z-index:960;width:360px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 112px);display:flex;flex-direction:column;overflow:hidden;background:#fffef8;color:#233b36;border:1px solid #b9c7b5;border-radius:14px;box-shadow:0 12px 45px #0004}
+body .solar-help header{display:flex;align-items:center;justify-content:space-between;padding:17px;background:#183c34;color:#f8e2aa;gap:10px}
+body .solar-help header strong{font-size:.95rem}body .solar-help header small{display:block;color:#c5d4c9;font-size:.63rem;margin-top:3px}
+body .solar-help header button{background:transparent;color:inherit;border:0;padding:8px}
+body .solar-help-intro{font-size:.75rem;padding:16px 16px 0;margin:0}
+body .solar-help-suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px}
+body .solar-help-suggestions button{background:#e8eedf;color:#294c39;border:1px solid #bacbb1;padding:7px;border-radius:6px;font-size:.68rem}
+body .solar-help-messages{overflow-y:auto;min-height:0;padding:0 16px;overscroll-behavior:contain}
+body .solar-help-answer{background:#eff2e6;border-radius:8px;padding:12px;margin-bottom:12px;font-size:.76rem}
+body .solar-help-answer strong{font-size:.65rem;color:#496b46}body .solar-help-answer p{margin:6px 0}body .solar-help-answer a{display:inline-block;text-decoration:underline;font-weight:600;margin-top:5px}
+body .solar-help form{padding:12px 16px 15px;border-top:1px solid #d6dbcf;flex-shrink:0}
+body .solar-help form label{font-size:.72rem;display:block;margin-bottom:7px}body .solar-help form>div{display:flex;gap:6px}body .solar-help form input{min-width:0;flex:1;padding:10px;border:1px solid #a4b59c;border-radius:6px;font-size:.8rem}
+body .solar-help form button{background:#183c34;color:#f8e2aa;border:0;border-radius:6px;padding:10px}body .solar-help form small{display:block;font-size:.6rem;margin-top:6px;color:#5b6f60}
+html[data-theme="dark"] body .solar-help{background:#1c2c26;color:#e1ebe4;border-color:#617663}
+html[data-theme="dark"] body :is(.solar-help-answer,.solar-help-suggestions button){background:#2d4435;color:#e1ebe4;border-color:#617663}
+html[data-theme="dark"] body :is(.solar-help-answer strong,.solar-help form small){color:#b9d2bb}
+@media(max-width:600px){body .solar-help-toggle{right:12px;bottom:12px;padding:11px 14px}body .solar-help{right:12px;bottom:72px;max-height:calc(100dvh - 90px)}}
+@media print{body .solar-help,body .solar-help-toggle{display:none!important}}

@@ -1,0 +1,4 @@
+html body .chart-legend .legend-dot.green { background: #62ddb0 !important; }
+html body .chart-legend .legend-line { border-color: #ffbc72 !important; background: transparent !important; }
+html[data-theme="dark"] body .chart-legend .legend-line { border-color: #c6a5ff !important; }
+html body .chart-legend { color: #dbe5ff; }

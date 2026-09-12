@@ -35,7 +35,7 @@ class DemoSeeder extends Seeder
             'Energía de Xelajú', 'Sol del Pacífico', 'Sendero de Retalhuleu', 'Luz de los Volcanes',
             'Horizonte Cuchumatán', 'Sol del Quiché', 'Valle de Salamá', 'Bosque de Luz',
             'Horizonte Maya', 'Caribe Solar', 'Valle del Sol', 'Luz de Chiquimula',
-            'Montaña de Jalapa', 'Amanecer de Jutiapa',
+            'Montaña de Jalapa', 'Amanecer de Jutiapa', 'Sol de Izabal', 'Horizonte del Lago',
         ];
         $energy = app(EnergyService::class);
         $generation = app(GenerationService::class);
@@ -45,8 +45,8 @@ class DemoSeeder extends Seeder
         $farmIndex = 0;
 
         foreach ($departments as $departmentIndex => $department) {
-            // Two locations in ten departments, one in each of the other twelve: 32 farms.
-            $locations = $departmentIndex < 10 ? 2 : 1;
+            // Two locations in twelve departments, one in each of the other ten: 34 farms.
+            $locations = $departmentIndex < 12 ? 2 : 1;
             for ($site = 0; $site < $locations; $site++, $farmIndex++) {
                 $name = $names[$departmentIndex].($site === 1 ? ' · Comunidad' : '');
                 $farm = SolarFarm::updateOrCreate(['name' => $name], [
@@ -55,10 +55,10 @@ class DemoSeeder extends Seeder
                     'latitude' => $department->latitude + ($site === 1 ? 0.036 : -0.018),
                     'longitude' => $department->longitude + ($site === 1 ? -0.026 : 0.022),
                     'families_count' => 85 + ($farmIndex * 47 % 520),
-                    'is_active' => $farmIndex !== 31,
+                    'is_active' => ! in_array($farmIndex, [31, 32], true),
                     'commissioned_at' => $currentMonth->subMonths(18 + ($farmIndex % 20))->toDateString(),
                     'notes' => 'Instalación ficticia para demostración. Datos sintéticos; no representan mediciones oficiales.'
-                        .($farmIndex === 31 ? ' Desactivada después del último mes registrado.' : ''),
+                        .(in_array($farmIndex, [31, 32], true) ? ' Desactivada después del último mes registrado.' : ''),
                 ]);
 
                 $farm->panels()->sync([

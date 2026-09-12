@@ -2,7 +2,7 @@
 @section('title','Reportes por departamento')
 @section('content')
 @php $t=$dashboard['totals']; $nf=fn($v,$d=0)=>number_format($v??0,$d,'.',','); @endphp
-<div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> DEL DATO A LA DECISIÓN</div><h1>El impacto, en perspectiva<span class="heading-dot">.</span></h1><p>Compara los resultados de cada departamento y descarga sus indicadores.</p></div><a class="button button-dark" href="{{ route('reports.export',request()->query()) }}"><x-icon name="download"/> Descargar CSV</a></div>
+<div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> DEL DATO A LA DECISIÓN</div><h1>El impacto, en perspectiva<span class="heading-dot">.</span></h1><p>Compara los resultados de cada departamento y descarga sus indicadores.</p></div><div class="heading-actions"><a class="button button-dark" href="{{ route('reports.print',request()->query()) }}" target="_blank"><x-icon name="download"/> Imprimir / PDF</a><a class="button button-dark" href="{{ route('reports.export',request()->query()) }}"><x-icon name="download"/> Descargar CSV</a></div></div>
 @include('partials.filters')
 <section class="card"><div class="card-heading"><div><h2>Recibe este reporte por correo</h2><p>Te enviaremos el CSV con los filtros actuales. Puedes usar Gmail u otro correo.</p></div></div>
 <form method="POST" action="{{ route('reports.email') }}" class="report-email-form" data-submit-form>@csrf

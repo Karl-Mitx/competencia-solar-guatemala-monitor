@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script>try{document.documentElement.dataset.theme=localStorage.getItem('solaris-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{document.documentElement.dataset.theme='light'}</script>
+    <script src="{{ asset('theme.js') }}"></script>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Panorama nacional') · SOLARIS Guatemala</title>
     <meta name="description" content="Monitoreo de generación solar en los 22 departamentos de Guatemala. Granjas, energía, impacto y proyecciones en un solo lugar.">
@@ -18,11 +18,12 @@
     <div class="country-label"><span class="flag">▥</span> Guatemala <span class="country-dot"></span></div>
     <p class="nav-label">CENTRO DE MONITOREO</p>
     <nav>
-    @foreach([['dashboard','dashboard','Panorama general'],['map','map','Mapa de granjas'],['farms.*','farm','Granjas solares'],['panels.*','sun','Catálogo de paneles'],['generations.*','bolt','Generación'],['reports','chart','Reportes'],['alerts.*','alert','Alertas'],['projections.*','trend','Proyecciones']] as [$pattern,$icon,$label])
+    @foreach([['dashboard','dashboard','Panorama general'],['map','map','Mapa de granjas'],['farms.*','farm','Granjas solares'],['farms.compare','chart','Comparar granjas'],['panels.*','sun','Catálogo de paneles'],['generations.*','bolt','Generación'],['reports','chart','Reportes'],['alerts.*','alert','Alertas'],['projections.*','trend','Proyecciones']] as [$pattern,$icon,$label])
         @php $routeName = str_contains($pattern, '*') ? str_replace('*','index',$pattern) : $pattern; @endphp
         <a href="{{ route($routeName) }}" class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}" @if(request()->routeIs($pattern)) aria-current="page" @endif><x-icon :name="$icon"/><span>{{ $label }}</span>@if(request()->routeIs($pattern))<span class="nav-active-dot"></span>@endif</a>
     @endforeach
     </nav>
+    <a class="nav-link {{ request()->routeIs('simulator') ? 'active' : '' }}" href="{{ route('simulator') }}" @if(request()->routeIs('simulator')) aria-current="page" @endif><x-icon name="bolt"/><span>Simulador solar</span></a>
     <div class="sidebar-bottom">
         <p class="nav-label">RECURSOS</p>
         <button type="button" class="nav-link theme-toggle" data-theme-toggle aria-pressed="false"><x-icon name="sun"/><span data-theme-label>Cambiar apariencia</span></button>
@@ -43,4 +44,5 @@
     </main>
 </div>
 @stack('scripts')
+@include('partials.solar-help')
 </body></html>

@@ -24,6 +24,7 @@ class FarmRequest extends FormRequest
             'is_active' => ['required', 'boolean'],
             'commissioned_at' => ['nullable', 'date', 'before_or_equal:today'],
             'notes' => ['nullable', 'string', 'max:2000'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'panels' => ['nullable', 'array', 'max:50'],
             'panels.*.solar_panel_id' => ['required', 'integer', 'distinct', 'exists:solar_panels,id'],
             'panels.*.quantity' => ['required', 'integer', 'between:1,10000000'],

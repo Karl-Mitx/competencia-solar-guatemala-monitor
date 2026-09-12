@@ -162,12 +162,12 @@ class DomainTest extends TestCase
         $this->seed(DemoSeeder::class);
 
         $this->assertSame(22, Department::count());
-        $this->assertSame(32, SolarFarm::count());
-        $this->assertSame(384, GenerationRecord::count());
-        $this->assertSame(1, SolarFarm::where('is_active', false)->count());
+        $this->assertSame(34, SolarFarm::count());
+        $this->assertSame(408, GenerationRecord::count());
+        $this->assertSame(2, SolarFarm::where('is_active', false)->count());
         $this->assertGreaterThan(0, Alert::where('status', 'active')->count());
-        $this->assertSame(189, Projection::count());
-        $this->assertSame(96, Projection::where('period', '<', '2026-09-01')->count());
+        $this->assertSame(198, Projection::count());
+        $this->assertSame(102, Projection::where('period', '<', '2026-09-01')->count());
         $this->seed(DepartmentSeeder::class);
         $this->assertSame(22, Department::count());
     }
