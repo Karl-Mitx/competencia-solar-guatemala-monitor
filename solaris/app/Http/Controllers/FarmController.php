@@ -11,6 +11,7 @@ use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Services\AuditLogger;
 
 class FarmController extends Controller
 {
@@ -73,6 +74,7 @@ class FarmController extends Controller
     {
         return DB::transaction(function () use ($request, $farm) {
             $data = $request->validated();
+            $wasExisting = $farm->exists;
             if ($request->hasFile('photo')) {
                 if ($farm->photo_path) Storage::disk('public')->delete($farm->photo_path);
                 $data['photo_path'] = $request->file('photo')->store('farms', 'public');
@@ -81,6 +83,7 @@ class FarmController extends Controller
             $rows = $data['panels'] ?? [];
             unset($data['panels']);
             $farm->fill($data)->save();
+            app(AuditLogger::class)->record($wasExisting ? 'updated' : 'created', $farm, ['fields' => array_keys($data)]);
             $farm->panels()->sync(collect($rows)->mapWithKeys(fn ($row) => [$row['solar_panel_id'] => ['quantity' => $row['quantity']]])->all());
 
             return $farm;
@@ -100,6 +103,7 @@ class FarmController extends Controller
     public function destroy(SolarFarm $farm)
     {
         $farm->update(['is_active' => false]);
+        app(AuditLogger::class)->record('deactivated', $farm, ['is_active' => [true, false]]);
 
         return redirect()->route('farms.show', $farm)->with('success', 'Granja desactivada. Su historial permanece disponible.');
     }
