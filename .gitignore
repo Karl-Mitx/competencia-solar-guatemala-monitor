@@ -24,3 +24,4 @@
 !/.env.deploy.example
 /docs/sources/rendered/
 *.log
+/output/deploy/
