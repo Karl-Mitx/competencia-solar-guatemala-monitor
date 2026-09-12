@@ -19,6 +19,6 @@ La implementación se coordina desde la rama de trabajo `codex/solaris`. Para ma
 3. Los avances se describen en issues o Pull Requests para que el historial muestre la participación de ambos.
 4. No se comparten contraseñas ni tokens; cada cuenta usa sus propias credenciales de GitHub.
 
-La invitación de GitHub queda pendiente del usuario exacto de Jerelyn. Después de agregarla, se debe confirmar que tenga permiso **Write** (o **Admin** si ambos administrarán la configuración) y activar protección de la rama principal cuando el repositorio tenga una rama por defecto.
+La invitación de GitHub ya fue enviada a `Jerelynm` con permiso **Write**. Jerelyn debe aceptarla desde GitHub para que el acceso quede activo; mientras la invitación esté pendiente, la API puede mostrar permiso de lectura para esa cuenta. Después de aceptarla, el equipo puede activar protección de la rama principal cuando el repositorio tenga una rama por defecto.
 
 Repositorio: <https://github.com/Karl-Mitx/competencia-solar-guatemala-monitor>
