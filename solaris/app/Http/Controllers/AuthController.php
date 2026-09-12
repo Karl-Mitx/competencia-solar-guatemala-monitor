@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -42,6 +44,61 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('dashboard');
+    }
+
+    public function register()
+    {
+        return view('auth.register');
+    }
+
+    public function storeRegistration(Request $request)
+    {
+        $data = $request->validate([
+            'name'                  => ['required', 'string', 'max:100'],
+            'email'                 => ['required', 'email', 'unique:users,email'],
+            'password'              => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $user = User::create([
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => $data['password'],
+            'role'     => 'technician',
+        ]);
+
+        Auth::login($user, remember: true);
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard')->with('success', 'Cuenta creada. Bienvenido a SOLARIS, '.$user->name.'.');
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Throwable) {
+            return redirect()->route('login')->withErrors(['email' => 'No se pudo autenticar con Google. Intenta de nuevo.']);
+        }
+
+        $user = User::firstOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'name'              => $googleUser->getName() ?? $googleUser->getEmail(),
+                'password'          => Hash::make(Str::random(32)),
+                'role'              => 'technician',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        Auth::login($user, remember: true);
+        request()->session()->regenerate();
+
+        return redirect()->intended(route('dashboard'));
     }
 
     public function forgotPassword()

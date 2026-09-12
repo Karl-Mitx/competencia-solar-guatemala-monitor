@@ -28,6 +28,10 @@ Route::post('/solar-help', SolarHelpController::class)->middleware('throttle:10,
 Route::get('/login', [AuthController::class, 'create'])->middleware('guest')->name('login');
 Route::post('/login', [AuthController::class, 'store'])->middleware('guest')->name('login.store');
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth')->name('logout');
+Route::get('/register', [AuthController::class, 'register'])->middleware('guest')->name('register');
+Route::post('/register', [AuthController::class, 'storeRegistration'])->middleware('guest')->name('register.store');
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->middleware('guest')->name('auth.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('guest')->name('auth.google.callback');
 Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('guest')->name('password.request');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
 Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.reset');

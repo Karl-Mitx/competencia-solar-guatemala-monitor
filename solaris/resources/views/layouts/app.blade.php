@@ -19,8 +19,13 @@
     <p class="nav-label">CENTRO DE MONITOREO</p>
     <nav>
     @foreach([['dashboard','dashboard','Panorama general'],['map','map','Mapa de granjas'],['farms.*','farm','Granjas solares'],['farms.compare','chart','Comparar granjas'],['panels.*','sun','Catálogo de paneles'],['generations.*','bolt','Generación'],['reports','chart','Reportes'],['alerts.*','alert','Alertas'],['projections.*','trend','Proyecciones']] as [$pattern,$icon,$label])
-        @php $routeName = str_contains($pattern, '*') ? str_replace('*','index',$pattern) : $pattern; @endphp
-        <a href="{{ route($routeName) }}" class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}" @if(request()->routeIs($pattern)) aria-current="page" @endif><x-icon :name="$icon"/><span>{{ $label }}</span>@if(request()->routeIs($pattern))<span class="nav-active-dot"></span>@endif</a>
+        @php
+            $routeName = str_contains($pattern, '*') ? str_replace('*','index',$pattern) : $pattern;
+            $isActive = $pattern === 'farms.*'
+                ? request()->routeIs('farms.*') && !request()->routeIs('farms.compare')
+                : request()->routeIs($pattern);
+        @endphp
+        <a href="{{ route($routeName) }}" class="nav-link {{ $isActive ? 'active' : '' }}" @if($isActive) aria-current="page" @endif><x-icon :name="$icon"/><span>{{ $label }}</span>@if($isActive)<span class="nav-active-dot"></span>@endif</a>
     @endforeach
     </nav>
     <a class="nav-link {{ request()->routeIs('simulator') ? 'active' : '' }}" href="{{ route('simulator') }}" @if(request()->routeIs('simulator')) aria-current="page" @endif><x-icon name="bolt"/><span>Simulador solar</span></a>
