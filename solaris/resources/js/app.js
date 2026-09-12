@@ -11,6 +11,20 @@ const readJson = (id) => { const el = document.getElementById(id); if (!el) retu
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
 
 function initMenu() {
+    const themeButton = document.querySelector('[data-theme-toggle]');
+    const updateTheme = () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        themeButton?.setAttribute('aria-pressed', String(dark));
+        const label = document.querySelector('[data-theme-label]');
+        if (label) label.textContent = dark ? 'Usar modo claro' : 'Usar modo oscuro';
+    };
+    themeButton?.addEventListener('click', () => {
+        const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = theme;
+        try { localStorage.setItem('solaris-theme', theme); } catch { /* Private browsing can disable storage. */ }
+        updateTheme();
+    });
+    updateTheme();
     const sidebar = document.getElementById('sidebar'); const scrim = document.querySelector('.sidebar-scrim');
     const toggle = document.querySelector('[data-menu-toggle]');
     const setOpen = (open) => { sidebar?.classList.toggle('open', open); scrim?.classList.toggle('open', open); toggle?.setAttribute('aria-expanded', String(open)); };

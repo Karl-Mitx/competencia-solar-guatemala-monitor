@@ -1,0 +1,26 @@
+body .theme-toggle{width:100%;border:0;text-align:left;background:transparent}
+body .report-email-form{display:flex;gap:16px;align-items:end;flex-wrap:wrap}body .report-email-form .field{flex:1;min-width:210px}body .report-email-form input{width:100%}
+html[data-theme="dark"]{color-scheme:dark;--ink:#e1ebe4;--paper:#101b19;--muted:#acbeb4;--line:#3c5047;--green:#91cba7}
+html[data-theme="dark"] body{background-color:#101b19;color:#e1ebe4;background-image:radial-gradient(#79968120 .7px,transparent .7px)}
+html[data-theme="dark"] body :is(.card,.metric-card,.topbar,.filter-bar,.summary-strip>div,.atlas-inventory article,.atlas-territory .map-card,.projection-journal,.projection-summary,.auth-card){background:#1c2c26;color:#e1ebe4;border-color:#3c5047;box-shadow:none}
+html[data-theme="dark"] body :is(th,tfoot,.checkbox-label,.soft-info,.capacity-preview,.method-note,.formula,.notice.neutral,.map-region-label){background:#273b31;color:#d1e4d7;border-color:#4a6253}
+html[data-theme="dark"] body :is(td,.page-footer,.summary-strip,.atlas-inventory article){border-color:#3c5047}
+html[data-theme="dark"] body tbody tr:hover{background:#293f33}
+html[data-theme="dark"] body :is(h1,h2,h3,.table-name,.field,.filter-heading,.filter-reset,.chart-legend,.system-status,.territory-toolbar label,.territory-reset,.territory-legend,.territory-scale-note){color:#d5e8db}
+html[data-theme="dark"] body :is(.muted,.page-heading p,.card-heading p,.card-description,.metric-meta,.metric-top,.breadcrumb,.summary-strip span,.eyebrow){color:#b7c9be}
+html[data-theme="dark"] body :is(input,select,textarea,.filter-bar input,.filter-bar select,.field input,.field select,.field textarea,.territory-toolbar select){background:#14231d;color:#e5eee5;border-color:#627b6b}
+html[data-theme="dark"] body input::placeholder,html[data-theme="dark"] body textarea::placeholder{color:#a7b9ad}
+html[data-theme="dark"] body :is(.button-white,.border-button){background:#2a4235;color:#ecf2e6;border-color:#69836e}
+html[data-theme="dark"] body .pill.neutral{background:#344b3c;color:#d7e6d7}
+html[data-theme="dark"] body .pill.positive{background:#234c36;color:#bce7be}
+html[data-theme="dark"] body :is(.pill.warning,.notice.danger){background:#55352c;color:#ffdac4}
+html[data-theme="dark"] body .notice.success{background:#234c36;color:#d0f1d5}
+html[data-theme="dark"] body :is(.leaflet-popup-content-wrapper,.leaflet-popup-tip){background:#20382a;color:#e6eedf}
+html[data-theme="dark"] body .leaflet-popup-content :is(.popup-title,.popup-meta,.popup-link){color:#e6eedf}
+html[data-theme="dark"] body .leaflet-control-zoom a{background:#20382a;color:#fff}
+html[data-theme="dark"] body .leaflet-tile-pane{filter:brightness(.75) saturate(.7)}
+html[data-theme="dark"] body .map-region-label span{color:#c0d4c3}
+html[data-theme="dark"] body :is(.atlas-footnote,.reading-baseline,.forecast-note){color:#b9cdbf}
+html[data-theme="dark"] body :is(.forecast-months,.forecast-months article,.atlas-inventory){background:#233b2d;border-color:#4a6253}
+html[data-theme="dark"] body :is(.forecast-baseline,.forecast-process small,.forecast-controls .forecast-help,.atlas-inventory article span:not(.inventory-number),.atlas-inventory article small){color:#b9cdbf}
+@media print{html[data-theme="dark"] body{background:white;color:black}}

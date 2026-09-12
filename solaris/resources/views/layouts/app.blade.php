@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('solaris-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{document.documentElement.dataset.theme='light'}</script>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Panorama nacional') · SOLARIS Guatemala</title>
     <meta name="description" content="Monitoreo de generación solar en los 22 departamentos de Guatemala. Granjas, energía, impacto y proyecciones en un solo lugar.">
@@ -24,6 +25,7 @@
     </nav>
     <div class="sidebar-bottom">
         <p class="nav-label">RECURSOS</p>
+        <button type="button" class="nav-link theme-toggle" data-theme-toggle aria-pressed="false"><x-icon name="sun"/><span data-theme-label>Cambiar apariencia</span></button>
         <a class="nav-link {{ request()->routeIs('api.docs') ? 'active' : '' }}" href="{{ route('api.docs') }}"><x-icon name="code"/> API & datos</a>
         <a class="nav-link {{ request()->routeIs('manual') ? 'active' : '' }}" href="{{ route('manual') }}"><x-icon name="book"/> Guía de uso</a>
         <div class="impact-note"><span class="impact-icon"><x-icon name="leaf"/></span><strong>Territorio. Energía. Impacto.</strong><p>22 departamentos en un mismo atlas.</p></div>
