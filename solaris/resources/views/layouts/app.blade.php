@@ -6,7 +6,7 @@
     <meta name="description" content="Monitoreo de generación solar en los 22 departamentos de Guatemala. Granjas, energía, impacto y proyecciones en un solo lugar.">
     <meta name="theme-color" content="#183c34">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRC9f6tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
